@@ -12,6 +12,7 @@ body {
     margin-top: 0px;
     margin-left: 0px;
     margin-right: 0px;
+    background-color: rgb(187, 180, 180);
 }
 
 table {
@@ -27,6 +28,7 @@ th {
 
 td {
     text-align: center;
+    color: white;
     
 }
 
@@ -36,11 +38,16 @@ tr:nth-child(even){
 
 tr:nth-child(odd){
     background-color: rgb(119, 138, 145);
+    
 }
 
 #totalMonthly {
     text-align: right;
     margin: 20px;
+    display: table-cell;
+    float: right;
+    background-color:rgb(187, 180, 180);
+    color: black;
 }
 
 .red {
