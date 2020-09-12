@@ -4,11 +4,11 @@ $().ready(readyNow);
 let totalMonthly = 0;//setting global variable to reference for the total monthly calculation
 
 
-function readyNow(){
+function readyNow() {
     console.log("jquery linked and ready");
-// set up what my page is going to look like
+    // set up what my page is going to look like
 
-$('body').append(`
+    $('body').append(`
 <header><h1>Salary Calculator</h1></header>
 <h2>Add Employee</h2>
 <br>
@@ -34,29 +34,58 @@ $('body').append(`
     <tbody id="employeeTable">
     </tbody>
 </table>
+<h3 id="totalMonthly">Total Monthly: $</h3>
 
 `);
 
-//click handler for the submit button that call addToTable
-$('#submitButton').on('click',addToTable);
+    //click handler for the submit button that call addToTable
+    $('#submitButton').on('click', addToTable);
+    $('body').on('click', '.deleteRow', deleteEmployee);
 }
 
 
 
-function addToTable(){
+function addToTable() {
     //setting inputs to variables to make them easier to work with
-    let fName = $('#fNameInput').val();
-    let lName = $('#lNameInput').val();
-    let id = $('#idInput').val();
-    let title = $('#titleInput').val();
-    let annualSalary = $('#annualSalaryInput').val();
-    //console.log(`${fName},${lName},${id},${title},${annualSalary}`);//loging the variables to test inputs before passing into dom
-    //append the table with the inputs
-    $('#employeeTable').append(`
+
+        let fName = $('#fNameInput').val();
+        let lName = $('#lNameInput').val();
+        let id = $('#idInput').val();
+        let title = $('#titleInput').val();
+        let annualSalary = $('#annualSalaryInput').val();
+        //console.log(`${fName},${lName},${id},${title},${annualSalary}`);//loging the variables to test inputs before passing into dom
+        //append the table with the inputs
+        if (fName != "" && lName != "" && id != "" && title != "" && annualSalary != "") {
+        $('#employeeTable').append(`
     <tr>
-        <td>${fName}</td><td>${lName}</td><td>${id}</td><td>${title}</td><td>${annualSalary}</td><td><button class="deleteRow">Delete</button></td>
+        <td>${fName}</td><td>${lName}</td><td>${id}</td><td>${title}</td><td class="annualSalaryTable">${annualSalary}</td><td><button class="deleteRow">Delete</button></td>
     </tr>
     `)
-    totalMonthly += Number(annualSalary);
-    console.log(totalMonthly);
+        totalMonthly += Number(annualSalary);
+        console.log(`Total Monthly variable is: ${totalMonthly}`);
+        if (totalMonthly / 12 > 20000) {//checking if totalMonthly is over $20,000
+            $('#totalMonthly').css("color", "red");
+        };
+
+        $('#totalMonthly').text(`Total Monthly: $ ${(totalMonthly / 12).toFixed(2)}`);
+        $('#fNameInput').val("");
+        $('#lNameInput').val("");
+        $('#idInput').val("");
+        $('#titleInput').val("");
+        $('#annualSalaryInput').val("");
+    }else{alert("Please leave no input blank");}
 }
+
+function deleteEmployee(event) {
+    let grabAnnualSalary = $(event.target).parent().parent().children('.annualSalaryTable').text();
+   console.log(grabAnnualSalary);
+    if (confirm("Are you sure you want to DELETE this employee")) {
+        $(event.target).closest('tr').remove();
+        totalMonthly -= Number(grabAnnualSalary);
+        $('#totalMonthly').text(`Total Monthly: $ ${(totalMonthly / 12).toFixed(2)}`);
+        if(totalMonthly/12 < 20000){
+            $('#totalMonthly').css("color", "black");
+        }
+    }
+}
+
